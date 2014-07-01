@@ -4,14 +4,18 @@ class Year
   end
 
   def self.leap? year
-    year = Year.new(year)
+    new(year).leap?
+  end
 
-    if year.divisible_by? 100
-      year.divisible_by? 400
+  def leap?
+    if divisible_by? 100
+      divisible_by? 400
     else
-      year.divisible_by? 4
+      divisible_by? 4
     end
   end
+
+  private
 
   def divisible_by? divisor
     @year % divisor == 0

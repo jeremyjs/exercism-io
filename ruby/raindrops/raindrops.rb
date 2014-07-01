@@ -1,45 +1,22 @@
-require 'prime'
-
-module MyPrimes
-  def self.prime_factors(number)
-    factors = []
-
-    while number > 1 do
-      primes_until(number).each do |prime|
-        if number % prime == 0
-          number /= prime
-          factors.unshift(prime)
-          break
-        end
-      end
-    end
-
-    factors
-  end
-
-  def self.primes_until(number)
-    primes = []
-    Prime.each(number){ |p| primes << p }
-    primes.reverse
+class Fixnum
+  def divisible_by?(number)
+    (self % number).zero?
   end
 end
 
 class Raindrops
-  include MyPrimes
+  @@types_of_drops = {
+    Pling: 3,
+    Plang: 5,
+    Plong: 7
+  }
 
   def self.convert(number)
-    factors = MyPrimes.prime_factors(number)
-
     raindrops = ""
-    raindrops << 'Pling' if factors.include?(3)
-    raindrops << 'Plang' if factors.include?(5)
-    raindrops << 'Plong' if factors.include?(7)
-
-    if raindrops.empty?
-      number.to_s
-    else
-      raindrops
+    @@types_of_drops.each do |sound, drops|
+      raindrops << sound.to_s if number.divisible_by?(drops)
     end
+    raindrops.empty? ? number.to_s : raindrops
   end
 end
 

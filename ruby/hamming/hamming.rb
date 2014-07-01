@@ -1,19 +1,21 @@
 class Hamming
   def self.compute(strand_1, strand_2)
-    strand_pairs = merge(strand_1, strand_2)
-    strand_pairs.reduce(0){ |total_distance, strand_pair| total_distance + distance(strand_pair) }
+    if strand_1.length > strand_2.length
+      strand_1, strand_2 = strand_2, strand_1
+    end
+    difference(strand_1, strand_2)
   end
 
-  def self.merge(strand_1, strand_2)
-    strand_1, strand_2 = strand_2, strand_1 if strand_2.length < strand_1.length
-    strand_1.split("").zip(strand_2.split(""))
+  def self.difference(strand_1, strand_2)
+    strand_1.length.times.count { |i| difference?(strand_1[i], strand_2[i]) }
   end
 
-  def self.swap(strand_1, strand_2)
-    strand_1, strand_2 = strand_2, strand_1
-  end
-
-  def self.distance(letter_pair)
-    letter_pair[0] == letter_pair[1] ? 0 : 1
+  def self.difference?(strand_1, strand_2)
+    if strand_1.length <= 1
+      strand_1 != strand_2[0]
+    else
+      difference(strand_1, strand_2) > 0
+    end
   end
 end
+
